@@ -1,0 +1,18 @@
+<div class="row">
+  <div class=" col-md-12 col-sx-12 ">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      {{ 'add.wheel' | translate }}
+    </div>
+    <div class="panel-body">
+      <form #addWheelForm="ngForm" (ngSubmit)="addWheel()" >
+        <div class="input-group">
+          <label for="wheelName">{{'wheel.name' | translate }}</label>
+          <div class="form-control"><input type="text" id="wheelName" name="wheelName" required [(ngModel)] = "wheel.name" #wheelName="ngModel"/></div>
+        </div>
+    <button class="btn btn-success" [disabled]="!addWheelForm.form.valid">{{'add.wheel.button' | translate }}</button>
+      </form>
+    </div>
+  </div>
+  </div>
+</div>

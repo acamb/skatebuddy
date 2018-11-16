@@ -1,0 +1,106 @@
+buildscript {
+	ext {
+		springBootVersion = '2.0.5.RELEASE'
+	}
+	repositories {
+		mavenCentral()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath "gradle.plugin.nl.javadude.gradle.plugins:license-gradle-plugin:0.14.0"
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: "com.github.hierynomus.license-report"
+group = 'strava.acambieri'
+version = '0.1'
+sourceCompatibility = 1.8
+ext.env = project.hasProperty('env') ? env : 'devel'
+repositories {
+	mavenCentral()
+}
+ext {
+    swagger_annotations_version = "1.5.9"
+    jackson_version = "2.9.4"
+    feign_version = "9.4.0"
+    feign_form_version = "2.1.0"
+    junit_version = "4.12"
+    oltu_version = "1.0.1"
+}
+processResources {
+    def profile = (project.hasProperty('env') ? env : 'devel').toLowerCase()
+    print "profile: $profile"
+    //include "**/*"
+    rename {
+        String name ->
+            name.replace("_${profile}.properties",".properties")
+    }
+}
+
+processResources.dependsOn(':frontend:build')
+dependencies {
+	implementation('org.springframework.boot:spring-boot-starter-web'){
+        exclude group: 'com.fasterxml.jackson.core'
+        exclude group: 'com.fasterxml.jackson.module'
+    }
+	implementation('org.mybatis.spring.boot:mybatis-spring-boot-starter:1.3.2'){
+        exclude group: 'com.fasterxml.jackson.core'
+        exclude group: 'com.fasterxml.jackson.module'
+    }
+	runtimeOnly('org.springframework.boot:spring-boot-devtools')
+	compile('com.h2database:h2')
+	compile group: 'org.cryptacular', name: 'cryptacular', version: '1.0'
+	//swagger generated client dependencies
+    compile "io.swagger:swagger-annotations:$swagger_annotations_version"
+    compile "io.github.openfeign:feign-core:$feign_version"
+    compile "io.github.openfeign:feign-jackson:$feign_version"
+    compile "io.github.openfeign:feign-slf4j:$feign_version"
+    compile "io.github.openfeign.form:feign-form:$feign_form_version"
+    compile "com.fasterxml.jackson.core:jackson-core:$jackson_version"
+    compile "com.fasterxml.jackson.core:jackson-annotations:$jackson_version"
+    compile "com.fasterxml.jackson.core:jackson-databind:$jackson_version"
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jackson_version"
+    compile "org.apache.oltu.oauth2:org.apache.oltu.oauth2.client:$oltu_version"
+    compile "com.brsanthu:migbase64:2.2"
+
+	///////////////////////////////////////
+	testImplementation('org.springframework.boot:spring-boot-starter-test')
+}
+gradle.taskGraph.whenReady { graph ->
+    def versionPropsFile = file('src/main/java/strava/acambieri/skatebuddy/BuildNumber.properties')
+    def Properties versionProps = new Properties()
+    if (versionPropsFile.canRead()) {
+        FileInputStream fs = new FileInputStream(versionPropsFile)
+        versionProps.load(fs)
+        def versionMin = 0
+        try {
+            versionMin = Integer.parseInt(versionProps['build.number']);
+        }
+        catch (NumberFormatException e) {
+
+        }
+        if (env.equals("prod")) {
+            versionMin++;
+            writeVersion(versionMin, versionProps, versionPropsFile)
+        }
+        fs.close()
+        println "BuildNumber: $versionMin"
+        version += "."+versionMin
+    } else {
+        writeVersion(1, versionProps, versionPropsFile)
+        version += ".1"
+    }
+}
+
+def writeVersion(version,props,file) {
+    props['build.number']=""+version
+    FileWriter fw = new FileWriter(file)
+    props.store(fw,"")
+    fw.close()
+}

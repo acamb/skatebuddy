@@ -1,0 +1,34 @@
+<div class="row">
+  <div class=" col-md-12 col-sx-12 ">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        {{ 'wheel.current' | translate }}
+      </div>
+      <div class="panel-body">
+        <div class="alert alert-warning" [hidden] = "hideRotateWarning">
+          {{'rotate.msg' | translate}}
+        </div>
+        <ul>
+          <li><b>{{ 'wheel.name' | translate}}:&nbsp;</b><span>{{wheel.name}}</span></li>
+          <li><b>{{ 'wheel.startDate' | translate}}:&nbsp;</b><span>{{wheel.startDate  | date}}</span></li>
+          <li><b>{{ 'wheel.totalKM' | translate}}:&nbsp;</b><span>{{wheel.totalKM}}</span></li>
+          <li><b>{{ 'wheel.lastRotationDate' | translate}}:&nbsp;</b><span>{{wheel.lastRotationDate  | date}}</span></li>
+          <li><b>{{ 'wheel.currentKM' | translate}}:&nbsp;</b><span>{{wheel.currentKM}}</span></li>
+          <li><b>{{ 'wheel.rotations' | translate}}:&nbsp;</b><span>{{wheel.rotationCounter}}</span></li>
+        </ul>
+        <button class="btn btn-primary" (click)="rotate()">{{'rotate' | translate}}</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-modal #rotateModal class="modalContainer">
+  <div>
+  <b>{{ 'suggested.rotate' | translate }}</b><br/><br/>
+    <img src="{{ rotateImgSrc }}" max-height="40%"/>
+    <div class="btn-group" role="group" >
+      <button (click)="doRotate()" class="btn btn-success"><span class="glyphicon glyphicon glyphicon-check" aria-hidden="true"></span> {{'do.rotate' | translate}}</button>
+      <button (click)="closeModal()" class="btn btn-default"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> {{'close' | translate}}</button>
+    </div>
+  </div>
+</app-modal>

@@ -1,0 +1,32 @@
+<app-current-wheel *ngIf="user?.stats.currentWheel" [(wheel)]="user?.stats.currentWheel"></app-current-wheel>
+<hr/>
+<div class="row">
+  <div class=" col-md-12 col-sx-12 ">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        {{ 'statistiche' | translate }}
+      </div>
+      <div class="panel-body">
+        <ul>
+          <li><b>{{ 'km.total' | translate}}:</b>&nbsp;<span>{{user?.stats.totalKM}}</span></li>
+          <li><b>{{ 'km.run.max' | translate}}:</b>&nbsp;<span>{{user?.stats.maxRunKM}}</span></li>
+          <li><b>{{ 'km.run.avg' | translate}}:</b>&nbsp;<span>{{user?.stats.avgRunKM}}</span></li>
+          <li><b>{{ 'speed.max' | translate}}:</b>&nbsp;<span>{{user?.stats.maxSpeed}}</span></li>
+          <li><b>{{ 'speed.avg' | translate}}:</b>&nbsp;<span>{{user?.stats.avgSpeed}}</span></li>
+          <li><b>{{ 'last.imported' | translate}}:</b>&nbsp;<span>{{user?.stats.lastImportedActivityDate  | date}}</span></li>
+        </ul>
+        <button class="btn btn-primary" (click)="importNewActivities()">{{'activities.import' | translate }}</button>
+      </div>
+    </div>
+  </div>
+</div>
+<app-modal #addWheelModal class="modalContainer">
+  <div>
+    <b>{{ 'confirm.addWheel' | translate }}</b><br/><br/>
+
+    <div class="btn-group" role="group" >
+      <button (click)="addWheel()" class="btn btn-success"><span class="glyphicon glyphicon glyphicon-check" aria-hidden="true"></span> {{'addWheel' | translate}}</button>
+      <button (click)="closeModal()" class="btn btn-primary"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> {{'continue.anyway' | translate}}</button>
+    </div>
+  </div>
+</app-modal>

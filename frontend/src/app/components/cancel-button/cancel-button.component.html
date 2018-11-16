@@ -1,0 +1,13 @@
+<button class="btn btn-danger" (click)="openConfirmDialog()">
+  {{ deleteKey | translate}}
+</button>
+<app-modal #confirmModal class="modalContainer">
+  <div>
+    <b>{{ 'confirm.delete' | translate }}</b><br/><br/>
+
+    <div class="btn-group" role="group" >
+      <button (click)="cancel()" class="btn btn-danger"><span class="glyphicon glyphicon glyphicon-check" aria-hidden="true"></span> {{'cancel' | translate}}</button>
+      <button (click)="closeModal()" class="btn btn-primary"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> {{'close' | translate}}</button>
+    </div>
+  </div>
+</app-modal>

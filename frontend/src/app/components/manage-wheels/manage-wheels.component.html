@@ -1,0 +1,44 @@
+<app-add-wheel></app-add-wheel>
+<hr/>
+<div class="row">
+  <div class=" col-md-12 col-sx-12 ">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        {{ 'wheels.list' | translate }}
+      </div>
+      <div class="panel-body">
+        <table class="table table-striped table-wheel table-mobile">
+          <thead>
+          <tr>
+            <th>{{'wheel.name' | translate }}</th>
+            <th>{{'wheel.startDate' | translate }}</th>
+            <th>{{'wheel.lastRotationDate' | translate }}</th>
+            <th>{{'wheel.totalKM' | translate }}</th>
+            <th>{{'wheel.currentKM' | translate }}</th>
+            <th>{{'wheel.rotations' | translate }}</th>
+            <th></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let wheel of (appState.wheels) ">
+            <td data-title="{{'wheel.name' | translate }}" [ngClass]="wheel.id === appState.user.stats.currentWheel?.id ? 'current' : ''"><span>{{wheel.name}}</span></td>
+            <td data-title="{{'wheel.startDate' | translate }}">{{wheel.startDate | date}}</td>
+            <td data-title="{{'wheel.lastRotationDate' | translate }}">{{wheel.lastRotationDate | date}}</td>
+            <td data-title="{{'wheel.totalKM' | translate }}">{{wheel.totalKM}}</td>
+            <td data-title="{{'wheel.currentKM' | translate }}">{{wheel.currentKM}}</td>
+            <td data-title="{{'wheel.rotations' | translate }}">{{wheel.rotationCounter}}</td>
+            <td>
+              <div class="button-bar">
+                <button class="btn btn-primary" (click)="setCurrentWheel(wheel)"  [disabled]="wheel.id === appState.user.stats.currentWheel?.id">
+                  {{ 'wheel.setCurrent' | translate}}
+                </button>
+                <app-cancel-button [payload]="wheel" (onCancel)="deleteWheel($event)"></app-cancel-button>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

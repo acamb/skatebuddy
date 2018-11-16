@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="strava.acambieri.skatebuddy.mapper.UserMapper">
+    <resultMap id="userMap" type="strava.acambieri.skatebuddy.model.User">
+        <id column="username" property="username"/>
+        <result column="email" property="email"/>
+        <result column="strava_id" property="stravaId"/>
+        <result column="access_token" property="accessToken"/>
+        <result column="refresh_token" property="refreshToken"/>
+        <result column="token_expires_at" property="tokenExpiresAt"/>
+        <association property="stats" column="username" select="statsSelect"/>
+    </resultMap>
+
+    <select id="statsSelect" resultMap="statsMap">
+        SELECT * FROM STATS WHERE USERNAME = #{username}
+    </select>
+
+    <resultMap id="statsMap" type="strava.acambieri.skatebuddy.model.Stats">
+        <result column="LAST_IMPORTED_ACT" property="lastImportedActivityDate"/>
+        <result column="SPEED_MAX" property="maxSpeed"/>
+        <result column="SPEED_AVG" property="avgSpeed"/>
+        <result column="KM_MAX" property="maxRunKM"/>
+        <result column="KM_AVG" property="avgRunKM"/>
+        <result column="KM_TOTAL" property="totalKM"/>
+        <result column="ROTATION_KM" property="rotationKM"/>
+        <result column="AUTOIMPORT" property="autoimport" typeHandler="strava.acambieri.skatebuddy.mapper.type.YNBooleanTypeHandler"/>
+        <association property="currentWheel" column="CURRENT_WHEEL" select="wheelSelect"/>
+    </resultMap>
+
+    <select id="wheelSelect" resultMap="wheelMap">
+        SELECT * FROM WHEELS WHERE ID = #{CURRENT_WHEEL}
+    </select>
+
+    <resultMap id="wheelMap" type="strava.acambieri.skatebuddy.model.Wheel" autoMapping="true">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="start_date" property="startDate" />
+        <result column="last_rotation_date" property="lastRotationDate"/>
+        <result column="total_KM" property="totalKM"/>
+        <result column="current_KM" property="currentKM"/>
+        <result column="rotation_counter" property="rotationCounter"/>
+    </resultMap>
+</mapper>

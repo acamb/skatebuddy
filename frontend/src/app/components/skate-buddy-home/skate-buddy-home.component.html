@@ -1,0 +1,6 @@
+<div *ngIf="appState.user?.stravaId == 0">
+  <app-connect-with-strava></app-connect-with-strava>
+</div>
+<div *ngIf="appState.user?.stravaId">
+  <app-user-stats [user]="appState.user"></app-user-stats>
+</div>

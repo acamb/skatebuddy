@@ -1,0 +1,47 @@
+<ng-template #headTemplate>
+  <tr>
+    <th>{{'nome' | translate}}</th>
+    <th>{{'data' | translate}}</th>
+    <th>{{'km' | translate}}</th>
+    <th></th>
+  </tr>
+</ng-template>
+<ng-template #itemTemplate let-item="item" let-index="index">
+  <td data-title="{{'nome' | translate}}">{{item.name}}</td>
+  <td data-title="{{'data' | translate}}">{{item.date | date}}</td>
+  <td data-title="{{'km' | translate}}">{{item.distance}}</td>
+  <td>
+    <div class="btn-group" role="group">
+      <button class="btn btn-default" (click)="goToDetail(item)">{{'dettagli' | translate}}</button>
+      <app-cancel-button [payload]="item" (onCancel)="cancel(item)"></app-cancel-button>
+    </div>
+  </td>
+</ng-template>
+<div>
+  <app-data-table-template
+    [data]="activities"
+    [paginated]="true"
+    [headerTemplate]="headTemplate"
+    [itemTemplate]="itemTemplate"
+  ></app-data-table-template>
+</div>
+<app-modal #detailModal class="modalContainer" style="width:80%;">
+  <div>
+    <ul>
+      <li><b>{{'nome' | translate}}:&nbsp;</b><span>{{selected?.name}}</span></li>
+      <li><b>{{'data' | translate}}:&nbsp;</b><span>{{selected?.date | date}}</span></li>
+      <li><b>{{'km' | translate}}:&nbsp;</b><span>{{selected?.distance}}</span></li>
+      <li><b>{{'time' | translate}}:&nbsp;</b><span>{{selected?.time | secondsToDuration}}</span></li>
+      <li><b>{{'maxSpeed' | translate}}:&nbsp;</b><span>{{selected?.maxSpeed}}</span></li>
+      <li><b>{{'avgSpeed' | translate}}:&nbsp;</b><span>{{selected?.avgSpeed}}</span></li>
+      <li>
+        <b>{{'wheelset' | translate }}:&nbsp;</b>
+        <select [(ngModel)]="selected.wheel" [compareWith]="compareWheel"
+                (change)="updateWheel(selected)">
+          <option *ngFor="let wheel of appState.wheels" [ngValue]="wheel">{{wheel.name}}</option>
+        </select>
+      </li>
+    </ul>
+    <button class="btn btn-danger" (click)="detailModal.close()">{{'close'|translate}}</button>
+  </div>
+</app-modal>

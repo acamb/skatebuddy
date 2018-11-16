@@ -1,0 +1,20 @@
+<div class="alert alert-success savedAlert" [hidden]="!saved">
+  {{'saved' | translate}}
+</div>
+
+<div class="row">
+  <div class=" col-md-12 col-sx-12 ">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        {{ 'settings' | translate }}
+      </div>
+      <div class="panel-body">
+       <ul>
+         <li><b>{{'autoimport' | translate}}&nbsp;</b><span class="right"><app-toggle-button [(value)]="appState.user.stats.autoimport"></app-toggle-button></span></li>
+         <li><b>{{'rotation.warning' | translate}}:&nbsp;</b><input  class="right" type="number" [(ngModel)]="appState.user.stats.rotationKM" size="3"/></li>
+       </ul>
+        <button class="btn btn-success" (click)="save()">{{ 'save' | translate}}</button>
+      </div>
+    </div>
+  </div>
+</div>
